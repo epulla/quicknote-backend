@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  redis:
+    container_name: redis_secretalizer
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    command: [sh, -c, "rm -f /data/dump.rdb && redis-server"]  # disable persistence
