@@ -4,14 +4,9 @@ PYTHON_ACTIVATE_ENV_DIR=$(if $(filter $(WIN),0),bin,Scripts)
 REQUIREMENTS_FILE=$(if $(filter $(WIN),0),requirements.txt,requirements_win.txt)
 
 
-start: ACTIVATE_ENV=1
 start:
-	if [ $(ACTIVATE_ENV) = 0 ] ; then \
-		python main.py ; \
-	else \
-		source .venv/$(PYTHON_ACTIVATE_ENV_DIR)/activate ; \
-		python main.py ; \
-	fi
+	uvicorn main:app --reload
+	
 
 install:
 	$(PYTHON_COMMAND) -m venv .venv ; \
