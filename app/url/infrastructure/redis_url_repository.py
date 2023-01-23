@@ -10,9 +10,14 @@ import redis
 
 
 class RedisUrlRepository(UrlRepository):
-    def __init__(self, url: str):
+    def __init__(self, host: str, port: int, password: str, ssl: bool):
         super().__init__("redis")
-        self.conn = async_redis.from_url(url=url)
+        self.conn = async_redis.Redis(
+            host=host,
+            port=port,
+            password=password,
+            ssl=ssl
+        )
 
     async def save_url(self, url: Url, expiration_time: int):
         print("Saving URL")

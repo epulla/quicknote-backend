@@ -13,7 +13,7 @@ from app.url.infrastructure import RedisUrlRepository, UrlShorterController
 from app.shared.application import Base64StrEncoder, AESEncrypter
 from app.shared.domain import ExceptionResponse
 from app.shared.domain.exceptions import DBConnectionError
-from app.shared.constants import REDIS_URL, URL_SEPARATOR, USE_URL_SHORTER
+from app.shared.constants import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_SSL, URL_SEPARATOR, USE_URL_SHORTER
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,13 +34,16 @@ settings = get_settings()
 
 # App Set Up
 note_controller = NoteController(
-    note_repository=RedisNoteRepository(url=REDIS_URL),
+    note_repository=RedisNoteRepository(
+        host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, ssl=REDIS_SSL),
     note_encrypter=NoteEncrypter(encrypter=AESEncrypter())
 )
 str_encoder = Base64StrEncoder()
 url_encoder = UrlEncoder(str_encoder=str_encoder)
 url_shorter_controller = UrlShorterController(
-    url_repository=RedisUrlRepository(url=REDIS_URL), str_encoder=str_encoder)
+    url_repository=RedisUrlRepository(
+        host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD, ssl=REDIS_SSL),
+    str_encoder=str_encoder)
 
 
 # Middlewares
