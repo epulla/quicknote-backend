@@ -12,6 +12,7 @@ import redis
 class RedisNoteRepository(NoteRepository):
     def __init__(self, url: str):
         super().__init__("redis")
+        self.conn_url = url
         self.conn = async_redis.from_url(url=url)
 
     async def create_note(self, note: Note, expiration_time: int):
@@ -48,4 +49,4 @@ class RedisNoteRepository(NoteRepository):
         try:
             await self.conn.ping()
         except redis.exceptions.ConnectionError:
-            raise DBConnectionError('redis')
+            raise DBConnectionError('redis', self.conn_url)
